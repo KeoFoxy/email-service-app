@@ -1,0 +1,23 @@
+# version: "3.8"
+
+services:
+    client:
+        build:
+            context: ./email-service-client
+            dockerfile: Dockerfile
+        ports:
+            - "8081:8081"
+        volumes:
+            - ./email-service-client:/app
+        environment:
+            - MODE=dev
+
+    server:
+        build:
+            context: ./email_server
+            dockerfile: Dockerfile
+        ports:
+            - "8080:8080"
+        volumes:
+            - ./email_server:/usr/src/app
+        command: ["cargo", "run"]

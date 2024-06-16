@@ -22,7 +22,7 @@ async fn main() -> std::io::Result<()> {
             .route("/send-email", web::post().to(handlers::send_email))
             .route("/get-emails", web::get().to(handlers::get_emails))
     })
-        .bind("127.0.0.1:8080")?
+        .bind("0.0.0.0:8080")?
         .run()
         .await
 }
