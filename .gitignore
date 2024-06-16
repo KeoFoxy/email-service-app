@@ -43,3 +43,6 @@ package-lock.json
 **/*.bun
 
 .idea
+
+storage
+DS_Store

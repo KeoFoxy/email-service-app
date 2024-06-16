@@ -1,11 +1,16 @@
-use std::fs::OpenOptions;
+use crate::models::EmailProps;
+use std::fs::{self, OpenOptions};
 use std::io;
 use std::io::{BufReader, Write};
-use crate::models::EmailProps;
 use uuid::Uuid;
 
 pub fn save_email(email: EmailProps) -> io::Result<()> {
+    let dir_path = "storage";
     let file_path = "storage/emails.json";
+
+    if !fs::metadata(dir_path).is_ok() {
+        fs::create_dir_all(dir_path)?;
+    }
 
     let file = OpenOptions::new()
         .read(true)
@@ -34,14 +39,11 @@ pub fn save_email(email: EmailProps) -> io::Result<()> {
 pub fn read_emails() -> io::Result<Vec<EmailProps>> {
     let file_path = "storage/emails.json";
 
-    let file = OpenOptions::new()
-        .read(true)
-        .open(file_path)?;
+    let file = OpenOptions::new().read(true).open(file_path)?;
 
     let reader = BufReader::new(file);
     let mut emails: Vec<EmailProps> = serde_json::from_reader(reader)?;
 
-    // Assign an ID if missing
     for email in &mut emails {
         if email.id.is_empty() {
             email.id = Uuid::new_v4().to_string();

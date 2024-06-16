@@ -1,5 +1,34 @@
 # Email Service - ALICE
 
+## Preview
+
+<details>
+<summary>Preview</summary>
+<img src="./preview/Screenshot 2024-06-16 at 16.35.02.png" />
+
+<img src="./preview/Screenshot 2024-06-16 at 16.35.39.png" />
+
+<img src="./preview/Screenshot 2024-06-16 at 16.36.01.png" />
+
+<img src="./preview/Screenshot 2024-06-16 at 16.36.08.png" />
+
+<img src="./preview/Screenshot 2024-06-16 at 16.37.03.png" />
+  
+</details>
+
+## Quick start
+
+Download [Docker Desktop](https://www.docker.com/products/docker-desktop/).   
+
+```sh
+git clone git@github.com:KeoFoxy/email-service-app.git
+
+cd email-service-app
+
+docker-compose build
+docker-compose up
+```
+
 ## Frontend
 
 * **React**
