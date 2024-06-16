@@ -24,6 +24,7 @@ module.exports = {
       jsx: true,
     },
     project: './tsconfig.json',
+    tsconfigRootDir: __dirname,
   },
   rules: {
     '@typescript-eslint/no-use-before-define': 'off',

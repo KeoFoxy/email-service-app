@@ -1,26 +1,52 @@
+use std::fs::OpenOptions;
+use std::io;
+use std::io::{BufReader, Write};
 use crate::models::EmailProps;
-use std::fs::{OpenOptions, File};
-use std::io::{Read, Write};
+use uuid::Uuid;
 
-pub fn save_email(new_email: EmailProps) {
-    let file_path = "emails.json";
-    let mut emails = read_emails();
+pub fn save_email(email: EmailProps) -> io::Result<()> {
+    let file_path = "storage/emails.json";
 
-    emails.push(new_email);
+    let file = OpenOptions::new()
+        .read(true)
+        .write(true)
+        .create(true)
+        .open(file_path)?;
 
-    let serialized_emails = serde_json::to_string(&emails).unwrap();
-    let mut file = OpenOptions::new().write(true).create(true).truncate(true).open(file_path).unwrap();
-    file.write_all(serialized_emails.as_bytes()).unwrap();
+    let mut emails: Vec<EmailProps> = if file.metadata()?.len() == 0 {
+        vec![]
+    } else {
+        let reader = BufReader::new(&file);
+        serde_json::from_reader(reader)?
+    };
+
+    emails.push(email);
+
+    let mut file = OpenOptions::new()
+        .write(true)
+        .truncate(true)
+        .open(file_path)?;
+    file.write_all(serde_json::to_string_pretty(&emails)?.as_bytes())?;
+
+    Ok(())
 }
 
-pub fn read_emails() -> Vec<EmailProps> {
-    let file_path = "emails.json";
-    let mut file = OpenOptions::new().read(true).create(true).open(file_path).unwrap();
-    let mut data = String::new();
-    file.read_to_string(&mut data).unwrap();
-    if data.is_empty() {
-        Vec::new()
-    } else {
-        serde_json::from_str(&data).unwrap()
+pub fn read_emails() -> io::Result<Vec<EmailProps>> {
+    let file_path = "storage/emails.json";
+
+    let file = OpenOptions::new()
+        .read(true)
+        .open(file_path)?;
+
+    let reader = BufReader::new(file);
+    let mut emails: Vec<EmailProps> = serde_json::from_reader(reader)?;
+
+    // Assign an ID if missing
+    for email in &mut emails {
+        if email.id.is_empty() {
+            email.id = Uuid::new_v4().to_string();
+        }
     }
+
+    Ok(emails)
 }

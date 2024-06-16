@@ -1,6 +1,7 @@
 import { FC, useState, useEffect } from 'react';
 import { Backdrop, Box, Fade, Modal, Typography } from '@mui/material';
-import { EmailProps } from '../../App';
+
+import { EmailProps } from '../../models';
 
 
 const style = {
@@ -50,21 +51,15 @@ export const EmailDetails: FC<Props> = ({ data, open, onClose }) => {
       <Fade in={isOpen}>
         <Box sx={style}>
           <Typography color="black" fontWeight="bold" variant="h5">
-            Email: {data?.email}
+            Email:
+            {' '}
+            {data?.email}
           </Typography>
           <Typography color="black" fontSize="18px" sx={{ mt: 2 }}>
-            Message: {data?.content}
+            <span dangerouslySetInnerHTML={{ __html: (data?.content || '').replace(/\n/g, '<br/>') }} />
           </Typography>
         </Box>
       </Fade>
-      {/*<Box>*/}
-      {/*  <Typography id="modal-modal-title" variant="h6" component="h2">*/}
-      {/*    Email: {data?.email}*/}
-      {/*  </Typography>*/}
-      {/*  <Typography id="modal-modal-description" sx={{ mt: 2 }}>*/}
-      {/*    Message: {data?.content}*/}
-      {/*  </Typography>*/}
-      {/*</Box>*/}
     </Modal>
   );
 };

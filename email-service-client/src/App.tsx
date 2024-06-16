@@ -1,22 +1,13 @@
 import { Autocomplete, Box, TextField } from '@mui/material';
 import { FC, useState } from 'react';
-import { v4 as uuid } from 'uuid';
+
 import { EmailDetails, EmailSender } from './components';
+import { useGetEmails } from './hooks/useGetEmails';
+import { EmailProps } from './models';
 
-
-export interface EmailProps {
-  id: string;
-  email: string;
-  content: string;
-}
 
 export const App: FC = () => {
-  // MockData
-  const searchResults: Array<EmailProps> = [
-    { id: uuid(), email: 'test1@email.com', content: 'Hello World' },
-    { id: uuid(), email: 'test2@email.com', content: 'I love anime' },
-    { id: uuid(), email: 'test3@email.com', content: 'Hahahehe' }
-  ];
+  const { data } = useGetEmails();
 
   const [selectedEmail, setSelectedEmail] = useState<EmailProps | undefined>(undefined);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -31,10 +22,10 @@ export const App: FC = () => {
       <Box padding="12px 0">
         <Autocomplete
           disablePortal
-          options={searchResults}
+          options={data}
           getOptionLabel={(option) => option.email}
-          value={searchResults.find(item => item.id === selectedEmail?.id)}
-          onChange={(_, value) => handleSearchSelect(value === null ? undefined : value)}
+          value={data.find(item => item.id === selectedEmail?.id)}
+          onChange={(_, value) => handleSearchSelect(null === value ? undefined : value)}
           isOptionEqualToValue={(option, value) => option.id === value.id}
           renderInput={(params) => <TextField {...params} label="Search" />}
         />

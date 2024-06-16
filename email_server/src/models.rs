@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct EmailProps {
     pub id: String,
     pub email: String,
@@ -11,9 +11,4 @@ pub struct EmailProps {
 pub struct EmailRequest {
     pub email: String,
     pub content: String,
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct SearchRequest {
-    pub email: String,
 }

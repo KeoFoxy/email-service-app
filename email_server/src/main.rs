@@ -5,7 +5,6 @@ mod email_utils;
 use actix_web::{web, App, HttpServer};
 use actix_cors::Cors;
 use dotenv::dotenv;
-use std::env;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
